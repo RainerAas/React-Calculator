@@ -1,13 +1,7 @@
+@import url("https://fonts.googleapis.com/css?family=Quicksand:400,500");
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    background: rgb(182, 133, 213) linear-gradient(90deg, rgba(182, 133, 213, 1) 0%, rgba(97, 219, 251, 1) 100%);
+    height: 100%;
+    font-family: "Quicksand", sans-serif;
+    flex-direction: row;
 }
