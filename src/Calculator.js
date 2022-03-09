@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import "./Calculator.css";
 
 export default function Calculator(props) {
-    const [displayValueStr, setDisplayValueStr] = useState("");
-    const [lastPlacedNumberStr, setLastPlacedNumberStr] = useState("");
-    const [placedNumberBool, setPlacedNumberBool] = useState(false);
-    const [placedDotBool, setPlacedDotBool] = useState(false);
-    const [placedOperatorBool, setPlacedOperatorBool] = useState(false);
+    const [displayValue, setDisplayValueStr] = useState("");
+    const [lastPlacedNumber, setLastPlacedNumberStr] = useState("");
+    const [isPlacedNumber, setPlacedNumberBool] = useState(false);
+    const [isPlacedDot, setPlacedDotBool] = useState(false);
+    const [isPlacedOperator, setPlacedOperatorBool] = useState(false);
 
     const handleNumberClick = ({ target }) => {
         const numberValue = target.value;
@@ -20,8 +20,8 @@ export default function Calculator(props) {
     const handleOperation = ({ target }) => {
         const operatorValue = target.value;
 
-        if (placedNumberBool) {
-            if (placedOperatorBool) {
+        if (isPlacedNumber) {
+            if (isPlacedOperator) {
                 setDisplayValueStr(prev => (prev.slice(0, -3) + ` ${operatorValue} `));
                 setPlacedDotBool(false);
             } else {
@@ -38,7 +38,7 @@ export default function Calculator(props) {
         const actionValue = target.value;
 
         if (actionValue === ".") {
-            if (placedNumberBool && !placedOperatorBool && !placedDotBool) {
+            if (isPlacedNumber && !isPlacedOperator && !isPlacedDot) {
                 setDisplayValueStr(prev => (prev + actionValue));
                 setLastPlacedNumberStr(prev => (prev + actionValue));
                 setPlacedDotBool(true);
@@ -47,13 +47,13 @@ export default function Calculator(props) {
         }
 
         if (actionValue === "+/-") {
-            if (!placedOperatorBool) {
-                let newDigit = lastPlacedNumberStr * -1;
+            if (!isPlacedOperator) {
+                let newDigit = lastPlacedNumber * -1;
 
-                setDisplayValueStr(prev => (prev.slice(0, -lastPlacedNumberStr.length) + newDigit));
+                setDisplayValueStr(prev => (prev.slice(0, -lastPlacedNumber.length) + newDigit));
                 setLastPlacedNumberStr(prev => (prev * -1).toString());
 
-                if (!displayValueStr.includes(".")) {
+                if (!displayValue.includes(".")) {
                     setPlacedDotBool(false);
                 }
             }
@@ -68,14 +68,14 @@ export default function Calculator(props) {
         }
 
         if (actionValue === "=") {
-            if (!placedOperatorBool && placedNumberBool) {
-                if (displayValueStr.startsWith("0")) {
+            if (!isPlacedOperator && isPlacedNumber) {
+                if (displayValue.startsWith("0")) {
                     setDisplayValueStr(prev => (prev.replace(/^0+/, "")));
                 }
 
-                let result = Function(`'use strict'; return (${displayValueStr})`)();
+                let result = Function(`'use strict'; return (${displayValue})`)();
                 setLastPlacedNumberStr(result);
-                props.addToHistoryArray(displayValueStr, result);
+                props.addToHistoryArray(displayValue, result);
                 setDisplayValueStr(result.toString());
                 setPlacedNumberBool(true);
 
@@ -87,30 +87,30 @@ export default function Calculator(props) {
     }
 
     return (
-        <div className="fade-in calculator">
-            <h1 className="calculator-name"><b>HW 01</b></h1>
-            <input id="calculator-display" type="text" className="calculator-screen z-depth-1" value={displayValueStr} disabled placeholder="0" />
-            <div className="calculator-keys">
-                <button onClick={handleOperation} type="button" className="btn btn-secondary" value="+">+</button>
-                <button onClick={handleOperation} type="button" className="btn btn-secondary" value="-">-</button>
-                <button onClick={handleOperation} type="button" className="btn btn-secondary" value="*">&times;</button>
-                <button onClick={handleOperation} type="button" className="btn btn-secondary" value="/">&divide;</button>
+        <div className="calculator calculator--fade-in">
+            <h1 className="calculator__name"><b>HW 01</b></h1>
+            <input className="calculator__screen" type="text"  disabled value={displayValue} placeholder="0" />
+            <div className="calculator__keys">
+                <button onClick={handleOperation} className="btn btn-secondary" type="button" value="+">+</button>
+                <button onClick={handleOperation} className="btn btn-secondary" type="button" value="-">-</button>
+                <button onClick={handleOperation} className="btn btn-secondary" type="button" value="*">&times;</button>
+                <button onClick={handleOperation} className="btn btn-secondary" type="button" value="/">&divide;</button>
 
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="7">7</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="8">8</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="9">9</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="4">4</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="5">5</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="6">6</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="1">1</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="2">2</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="3">3</button>
-                <button onClick={handleNumberClick} type="button" className="btn number-button" value="0">0</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="7">7</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="8">8</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="9">9</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="4">4</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="5">5</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="6">6</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="1">1</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="2">2</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="3">3</button>
+                <button onClick={handleNumberClick} className="btn calculator__number-button" type="button" value="0">0</button>
 
-                <button onClick={handleAction} type="button" className="btn btn-secondary" value=".">.</button>
-                <button onClick={handleAction} type="button" className="btn btn-secondary" value="+/-">+/-</button>
-                <button onClick={handleAction} type="button" className="btn btn-danger btn-sm" value="clear" >C</button>
-                <button onClick={handleAction} type="button" className="equal-sign-button btn btn-primary" value="=">=</button>
+                <button onClick={handleAction} className="btn btn-secondary" type="button" value=".">.</button>
+                <button onClick={handleAction} className="btn btn-secondary" type="button" value="+/-">+/-</button>
+                <button onClick={handleAction} className="btn btn-danger" type="button" value="clear">C</button>
+                <button onClick={handleAction} className="btn btn-primary calculator__equal-sign" type="button" value="=">=</button>
             </div>
         </div>
     );
