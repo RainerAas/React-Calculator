@@ -12,13 +12,13 @@ export default function App() {
     };
 
     const handleHistoryOpen = () => {
-        document.querySelector("#history-side").classList.remove("side-div-closed");
-        document.querySelector("#history-side").classList.add("side-div-open");
+        document.querySelector(".history-div").classList.remove("history-div--closed");
+        document.querySelector(".history-div").classList.add("history-div--open");
     };
 
     const handleHistoryClose = () => {
-        document.querySelector("#history-side").classList.remove("side-div-open");
-        document.querySelector("#history-side").classList.add("side-div-closed");
+        document.querySelector(".history-div").classList.remove("history-div--open");
+        document.querySelector(".history-div").classList.add("history-div--closed");
     };
 
     const handleAddCalculator = () => {
@@ -35,17 +35,19 @@ export default function App() {
 
     return (
         <div>
-            <nav className="navbar navbar-expand py-2">
-                <button type="button" className="btn btn-dark fade-in" onClick={handleAddCalculator}>Add Calculator</button>
-                <button type="button" className="btn btn-dark fade-in" onClick={handleRemoveCalculator}>Remove Calculator</button>
-                <span className="open-btn fade-in" onClick={handleHistoryOpen}>&#9776; History</span>
+            <nav className="navbar">
+                <div className="navbar__dynamic-btns">
+                    <button className="navbar__btn navbar__add-calc-btn" type="button" onClick={handleAddCalculator}>Add Calculator</button>
+                    <button className="navbar__btn " type="button" onClick={handleRemoveCalculator}>Remove Calculator</button>
+                </div>
+                <button className="navbar__btn navbar__open-history-btn" type="button" onClick={handleHistoryOpen}>&#9776; History</button>
             </nav>
 
-            <div id="history-side" className="side-div side-div-closed">
-                <button className="close-btn" onClick={handleHistoryClose}>&times;</button>
-                <ul className="history-items">
+            <div className="history-div history-div--closed">
+                <button className="history-div__close-btn" onClick={handleHistoryClose}>&times;</button>
+                <ul className="history-div__history-items">
                     {history.map((history, i) =>
-                        <li key={"history-result_" + i} className="history-result">{history}</li>
+                        <li key={"history-div__history-result_" + i} className="history-div__history-result">{history}</li>
                     )}
                 </ul>
             </div>

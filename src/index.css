@@ -5,3 +5,12 @@ body {
     font-family: "Quicksand", sans-serif;
     flex-direction: row;
 }
+
+button:hover {
+    cursor: pointer;
+}
+
+button:focus {
+    transform: scale(1.05);
+    transition: scale 0.2s ease-out;
+}
