@@ -1,116 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { handleNumber, handleAction, handleOperation } from "./store/actions/calculator/calculator.actions";
 import "./Calculator.css";
 
 export default function Calculator(props) {
-    const [displayValue, setDisplayValueStr] = useState("");
-    const [lastPlacedNumber, setLastPlacedNumberStr] = useState("");
-    const [isPlacedNumber, setPlacedNumberBool] = useState(false);
-    const [isPlacedDot, setPlacedDotBool] = useState(false);
-    const [isPlacedOperator, setPlacedOperatorBool] = useState(false);
 
-    const handleNumberClick = ({ target }) => {
-        const numberValue = target.value;
-
-        setDisplayValueStr(prev => (prev + numberValue));
-        setLastPlacedNumberStr(prev => (prev + numberValue))
-        setPlacedNumberBool(true);
-        setPlacedOperatorBool(false);
-    };
-
-    const handleOperation = ({ target }) => {
-        const operatorValue = target.value;
-
-        if (isPlacedNumber) {
-            if (isPlacedOperator) {
-                setDisplayValueStr(prev => (prev.slice(0, -3) + ` ${operatorValue} `));
-                setPlacedDotBool(false);
-            } else {
-                setDisplayValueStr(prev => (prev + ` ${operatorValue} `));
-                setPlacedOperatorBool(true);
-                setPlacedDotBool(false);
-            }
-
-            setLastPlacedNumberStr("");
-        }
-    };
-
-    const handleAction = ({ target }) => {
-        const actionValue = target.value;
-
-        if (actionValue === ".") {
-            if (isPlacedNumber && !isPlacedOperator && !isPlacedDot) {
-                setDisplayValueStr(prev => (prev + actionValue));
-                setLastPlacedNumberStr(prev => (prev + actionValue));
-                setPlacedDotBool(true);
-                setPlacedNumberBool(false);
-            }
-        }
-
-        if (actionValue === "+/-") {
-            if (!isPlacedOperator) {
-                let newDigit = lastPlacedNumber * -1;
-
-                setDisplayValueStr(prev => (prev.slice(0, -lastPlacedNumber.length) + newDigit));
-                setLastPlacedNumberStr(prev => (prev * -1).toString());
-
-                if (!displayValue.includes(".")) {
-                    setPlacedDotBool(false);
-                }
-            }
-        }
-
-        if (actionValue === "clear") {
-            setDisplayValueStr("");
-            setLastPlacedNumberStr("");
-            setPlacedNumberBool(false);
-            setPlacedDotBool(false);
-            setPlacedOperatorBool(false);
-        }
-
-        if (actionValue === "=") {
-            if (!isPlacedOperator && isPlacedNumber) {
-                if (displayValue.startsWith("0")) {
-                    setDisplayValueStr(prev => (prev.replace(/^0+/, "")));
-                }
-
-                let result = Function(`'use strict'; return (${displayValue})`)();
-                setLastPlacedNumberStr(result);
-                props.addToHistoryArray(displayValue, result);
-                setDisplayValueStr(result.toString());
-                setPlacedNumberBool(true);
-
-                if (result.toString().includes(".")) {
-                    setPlacedDotBool(true);
-                }
-            }
-        }
-    }
+    const dispatch = useDispatch();
+    const calculatorNo = props.calculatorNo;
+    const displayValue = useSelector(state => state.calculator.states[calculatorNo].displayValue);
+    const calcName = "CALC"
 
     return (
         <div className="calculator calculator--fade-in">
-            <h1 className="calculator__name">CALC</h1>
-            <input className="calculator__screen" type="text"  disabled value={displayValue} placeholder="0"/>
+            <h1 className="calculator__name">{calcName}</h1>
+            <input className="calculator__screen" type="text" disabled value={displayValue} placeholder="0" />
             <div className="calculator__numpad">
-                <button onClick={handleOperation} className="calculator__btn calculator__action-btn" type="button" value="+">+</button>
-                <button onClick={handleOperation} className="calculator__btn calculator__action-btn" type="button" value="-">-</button>
-                <button onClick={handleOperation} className="calculator__btn calculator__action-btn" type="button" value="*">&times;</button>
-                <button onClick={handleOperation} className="calculator__btn calculator__action-btn" type="button" value="/">&divide;</button>
+                <button onClick={() => dispatch(handleOperation("+", calculatorNo))} className="calculator__btn calculator__action-btn" type="button" value="+">+</button>
+                <button onClick={() => dispatch(handleOperation("-", calculatorNo))} className="calculator__btn calculator__action-btn" type="button" value="-">-</button>
+                <button onClick={() => dispatch(handleOperation("*", calculatorNo))} className="calculator__btn calculator__action-btn" type="button" value="*">&times;</button>
+                <button onClick={() => dispatch(handleOperation("/", calculatorNo))} className="calculator__btn calculator__action-btn" type="button" value="/">&divide;</button>
 
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="7">7</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="8">8</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="9">9</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="4">4</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="5">5</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="6">6</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="1">1</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="2">2</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="3">3</button>
-                <button onClick={handleNumberClick} className="calculator__btn calculator__number-btn" type="button" value="0">0</button>
+                <button onClick={() => dispatch(handleNumber(7, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="7">7</button>
+                <button onClick={() => dispatch(handleNumber(8, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="8">8</button>
+                <button onClick={() => dispatch(handleNumber(9, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="9">9</button>
+                <button onClick={() => dispatch(handleNumber(4, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="4">4</button>
+                <button onClick={() => dispatch(handleNumber(5, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="5">5</button>
+                <button onClick={() => dispatch(handleNumber(6, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="6">6</button>
+                <button onClick={() => dispatch(handleNumber(1, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="1">1</button>
+                <button onClick={() => dispatch(handleNumber(2, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="2">2</button>
+                <button onClick={() => dispatch(handleNumber(3, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="3">3</button>
+                <button onClick={() => dispatch(handleNumber(0, calculatorNo))} className="calculator__btn calculator__number-btn" type="button" value="0">0</button>
 
-                <button onClick={handleAction} className="calculator__btn calculator__action-btn" type="button" value=".">.</button>
-                <button onClick={handleAction} className="calculator__btn calculator__action-btn" type="button" value="+/-">+/-</button>
-                <button onClick={handleAction} className="calculator__btn calculator__clear-btn" type="button" value="clear">C</button>
-                <button onClick={handleAction} className="calculator__btn calculator__equal-btn" type="button" value="=">=</button>
+                <button onClick={() => dispatch(handleAction(".", calculatorNo))} className="calculator__btn calculator__action-btn" type="button" value=".">.</button>
+                <button onClick={() => dispatch(handleAction("+/-", calculatorNo))} className="calculator__btn calculator__action-btn" type="button" value="+/-">+/-</button>
+                <button onClick={() => dispatch(handleAction("clear", calculatorNo))} className="calculator__btn calculator__clear-btn" type="button" value="clear">C</button>
+                <button onClick={() => dispatch(handleAction("=", calculatorNo))} className="calculator__btn calculator__equal-btn" type="button" value="=">=</button>
             </div>
         </div>
     );
