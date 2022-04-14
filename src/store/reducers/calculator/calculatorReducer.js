@@ -1,4 +1,4 @@
-import { HANDLE_NUMBER, HANDLE_OPERATION, HANDLE_ACTION, ADD_NEW_CALCULATOR_STATE, REMOVE_CALCULATOR_STATE } from '../../actions/calculator/calculator.actions';
+import { HANDLE_NUMBER, HANDLE_OPERATION, HANDLE_ACTION, ADD_NEW_CALCULATOR_STATE, REMOVE_CALCULATOR_STATE } from '../../actions/calculator/calculatorActions';
 
 const initialState = {
     history: [],

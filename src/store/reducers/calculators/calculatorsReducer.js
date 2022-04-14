@@ -1,5 +1,5 @@
-import { HANDLE_ADD_CALCUALTOR, HANDLE_REMOVE_CALCULATOR } from '../../actions/calculators/calculators.actions';
-import Calculator from "../../../Calculator.js";
+import { HANDLE_ADD_CALCUALTOR, HANDLE_REMOVE_CALCULATOR } from '../../actions/calculators/calculatorsActions';
+import Calculator from "../../../components/calculator";
 
 const initialState = {
     calculators: [<Calculator key={0} calculatorNo={0}/>]

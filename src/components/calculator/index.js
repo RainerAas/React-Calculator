@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { handleNumber, handleAction, handleOperation } from "./store/actions/calculator/calculator.actions";
+import { handleNumber, handleAction, handleOperation } from "../../store/actions/calculator/calculatorActions";
 import "./Calculator.css";
 
 export default function Calculator(props) {
